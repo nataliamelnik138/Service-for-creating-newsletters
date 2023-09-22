@@ -30,7 +30,8 @@ class Messages(models.Model):
 
 
 class MailingSettings(models.Model):
-    time = models.TimeField(verbose_name='Время')
+    start_date = models.DateTimeField(verbose_name='Начало рассылки')
+    end_date = models.DateTimeField(verbose_name='Окончание рассылки')
     periodicity = models.DurationField(verbose_name='Периодичность')
     status = models.CharField(default='Создана', verbose_name='Статус')
     message = models.ForeignKey(Messages, on_delete=models.CASCADE, verbose_name='Сообщение')
