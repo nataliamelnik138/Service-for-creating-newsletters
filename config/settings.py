@@ -75,7 +75,7 @@ WSGI_APPLICATION = 'config.wsgi.application'
 DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.postgresql_psycopg2',
-        'NAME': 'catalog',
+        'NAME': 'mailings',
         'USER': 'postgres',
         'PASSWORD': 123456,
         'HOST': '127.0.0.1',
