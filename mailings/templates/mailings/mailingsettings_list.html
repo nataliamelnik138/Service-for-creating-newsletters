@@ -13,11 +13,32 @@
                 <li>ID: {{object.pk}}</li>
                 <li>Начало рассылки: {{object.start_date}}</li>
                 <li>Окончание рассылки: {{object.end_date}}</li>
-                <li>Периодичность: {{object.periodicity}}</li>
-                <li>Статус: {{object.status}}</li>
+                <li>Периодичность:
+                    {% if object.periodicity == 'daily' %}
+                    Ежедневно
+                    {% endif %}
+                    {% if object.periodicity == 'weekly' %}
+                    Еженедельно
+                    {% endif %}
+                    {% if object.periodicity == 'monthly' %}
+                    Ежемесячно
+                    {% endif %}
+                </li>
+                <li>Статус:
+                    {% if object.status == 'created' %}
+                    Создана
+                    {% endif %}
+                    {% if object.status == 'started' %}
+                    Запущена
+                    {% endif %}
+                    {% if object.status == 'completed' %}
+                    Завершена
+                    {% endif %}
+                </li>
             </ul>
             <div class="btn-group">
-                <a href="{% url 'mailings:view' object.pk %}" class="btn btn-outline-primary"  role="button">Просмотреть</a>
+                <a href="{% url 'mailings:view' object.pk %}" class="btn btn-outline-primary"
+                   role="button">Просмотреть</a>
                 <a href="{% url 'mailings:edit' object.pk %}" class="btn btn-outline-success" role="button">Редактировать</a>
                 <a href="{% url 'mailings:delete' object.pk %}" class="btn btn-outline-danger" role="button">Удалить</a>
             </div>

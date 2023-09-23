@@ -6,8 +6,28 @@
         <div class="card-body">
             <p>Начало рассылки: {{object.start_date}}</p>
             <p>Окончание рассылки: {{object.end_date}}</p>
-            <p>Периодичность: {{object.periodicity}}</p>
-            <p>Статус: {{object.status}}</p>
+            <p>Периодичность:
+                {% if object.periodicity == 'daily' %}
+                Ежедневно
+                {% endif %}
+                {% if object.periodicity == 'weekly' %}
+                Еженедельно
+                {% endif %}
+                {% if object.periodicity == 'monthly' %}
+                Ежемесячно
+                {% endif %}
+            </p>
+            <p>Статус:
+                {% if object.status == 'created' %}
+                    Создана
+                    {% endif %}
+                    {% if object.status == 'started' %}
+                    Запущена
+                    {% endif %}
+                    {% if object.status == 'completed' %}
+                    Завершена
+                    {% endif %}
+                </p>
             <p>Тема сообщения: {{object.message}}
                 <br>Содержание сообщения: {{object.message.content}}</p>
             <p>Клиенты:
