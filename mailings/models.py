@@ -32,8 +32,18 @@ class Messages(models.Model):
 class MailingSettings(models.Model):
     start_date = models.DateTimeField(verbose_name='Начало рассылки')
     end_date = models.DateTimeField(verbose_name='Окончание рассылки')
-    periodicity = models.DurationField(verbose_name='Периодичность')
-    status = models.CharField(default='Создана', verbose_name='Статус')
+    period_choices = [
+        ('daily', 'Ежедневно'),
+        ('weekly', 'Еженедельно'),
+        ('monthly', 'Ежемесячно'),
+    ]
+    periodicity = models.CharField(max_length=10, choices=period_choices, verbose_name='Периодичность')
+    status_choices = [
+        ('created', 'Created'),
+        ('started', 'Started'),
+        ('completed', 'Completed'),
+    ]
+    status = models.CharField(max_length=10, choices=status_choices, default='created', verbose_name='Статус')
     message = models.ForeignKey(Messages, on_delete=models.CASCADE, verbose_name='Сообщение')
     clients = models.ManyToManyField(Clients, verbose_name='Клиенты')
 
@@ -57,3 +67,10 @@ class MailingLogs(models.Model):
     class Meta:
         verbose_name = 'логи рассылки'
         verbose_name_plural = 'логи рассылок'
+
+
+class Log(models.Model):
+    mailing = models.ForeignKey(MailingSettings, on_delete=models.CASCADE, verbose_name='Рассылка')
+    timestamp = models.DateTimeField(auto_now_add=True, verbose_name='Дата и время последней попытки')
+    status = models.CharField(max_length=20, verbose_name='Статус попытки')
+    response = models.TextField(blank=True, verbose_name='Ответ сервера')
