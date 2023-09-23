@@ -1,20 +1,14 @@
-from django.urls import reverse_lazy, reverse
+from django.urls import reverse_lazy
 from django.views.generic import ListView, DetailView, CreateView, UpdateView, DeleteView
 
 
-from mailings.models import MailingSettings, Clients
-from mailings.services import send_mailing
+from mailings.models import MailingSettings, Clients, Log
 
 
 class MailingSettingsCreateView(CreateView):
     model = MailingSettings
     fields = ('start_date', 'end_date', 'periodicity', 'message', 'clients')
     success_url = reverse_lazy('mailings:list')
-
-    def form_valid(self, form):
-        obj = form.save()
-        send_mailing(obj)
-        return super().form_valid(form)
 
 
 class MailingSettingsUpdateView(UpdateView):
@@ -79,3 +73,10 @@ class ClientsDetailView(DetailView):
 class ClientsDeleteView(DeleteView):
     model = Clients
     success_url = reverse_lazy('mailings:list_client')
+
+
+class LogListView(ListView):
+    model = Log
+    extra_context = {
+        'title': 'Отчет проведенных рассылок'
+    }
