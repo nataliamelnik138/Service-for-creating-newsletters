@@ -1,3 +1,4 @@
+from django.shortcuts import render
 from django.urls import reverse_lazy
 from django.views.generic import ListView, DetailView, CreateView, UpdateView, DeleteView
 
@@ -80,3 +81,13 @@ class LogListView(ListView):
     extra_context = {
         'title': 'Отчет проведенных рассылок'
     }
+
+
+def get_mailing_logs(request, pk):
+    mailing_pk = pk
+
+    context = {
+        'object_list': Log.objects.filter(mailing_id=mailing_pk),
+        'title': 'Логи рассылки'
+    }
+    return render(request, 'mailings/mailing_logs.html', context)
