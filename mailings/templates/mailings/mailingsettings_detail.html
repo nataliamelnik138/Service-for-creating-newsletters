@@ -35,6 +35,9 @@
                 <li>{{ client }}</li>
                 {% endfor %}
             </p>
+            <p>
+                <a href="{% url 'mailings:mailing_logs' object.pk %}" class="btn btn-outline-primary" role="button">Просмотреть логи</a>
+            </p>
         </div>
     </div>
 </div>
