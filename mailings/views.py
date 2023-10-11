@@ -1,3 +1,5 @@
+from django.contrib.auth.decorators import login_required
+from django.contrib.auth.mixins import LoginRequiredMixin
 from django.shortcuts import render
 from django.urls import reverse_lazy
 from django.views.generic import ListView, DetailView, CreateView, UpdateView, DeleteView
@@ -6,26 +8,26 @@ from django.views.generic import ListView, DetailView, CreateView, UpdateView, D
 from mailings.models import MailingSettings, Clients, Log
 
 
-class MailingSettingsCreateView(CreateView):
+class MailingSettingsCreateView(LoginRequiredMixin, CreateView):
     model = MailingSettings
     fields = ('start_date', 'end_date', 'periodicity', 'message', 'clients')
     success_url = reverse_lazy('mailings:list')
 
 
-class MailingSettingsUpdateView(UpdateView):
+class MailingSettingsUpdateView(LoginRequiredMixin, UpdateView):
     model = MailingSettings
     fields = ('start_date', 'end_date', 'periodicity', 'message', 'clients')
     success_url = reverse_lazy('mailings:list')
 
 
-class MailingSettingsListView(ListView):
+class MailingSettingsListView(LoginRequiredMixin, ListView):
     model = MailingSettings
     extra_context = {
         'title': 'Список рассылок'
     }
 
 
-class MailingSettingsDetailView(DetailView):
+class MailingSettingsDetailView(LoginRequiredMixin, DetailView):
     model = MailingSettings
 
     def get_context_data(self, *args, **kwargs):
@@ -36,31 +38,31 @@ class MailingSettingsDetailView(DetailView):
         return context_data
 
 
-class MailingSettingsDeleteView(DeleteView):
+class MailingSettingsDeleteView(LoginRequiredMixin, DeleteView):
     model = MailingSettings
     success_url = reverse_lazy('mailings:list')
 
 
-class ClientsCreateView(CreateView):
+class ClientsCreateView(LoginRequiredMixin, CreateView):
     model = Clients
     fields = ('email', 'fullname', 'comment')
     success_url = reverse_lazy('mailings:list_client')
 
 
-class ClientsUpdateView(UpdateView):
+class ClientsUpdateView(LoginRequiredMixin, UpdateView):
     model = Clients
     fields = ('email', 'fullname', 'comment')
     success_url = reverse_lazy('mailings:list_client')
 
 
-class ClientsListView(ListView):
+class ClientsListView(LoginRequiredMixin, ListView):
     model = Clients
     extra_context = {
         'title': 'Список клиентов'
     }
 
 
-class ClientsDetailView(DetailView):
+class ClientsDetailView(LoginRequiredMixin, DetailView):
     model = Clients
 
     def get_context_data(self, *args, **kwargs):
@@ -71,18 +73,19 @@ class ClientsDetailView(DetailView):
         return context_data
 
 
-class ClientsDeleteView(DeleteView):
+class ClientsDeleteView(LoginRequiredMixin, DeleteView):
     model = Clients
     success_url = reverse_lazy('mailings:list_client')
 
 
-class LogListView(ListView):
+class LogListView(LoginRequiredMixin, ListView):
     model = Log
     extra_context = {
         'title': 'Отчет проведенных рассылок'
     }
 
 
+@login_required
 def get_mailing_logs(request, pk):
     mailing_pk = pk
 
