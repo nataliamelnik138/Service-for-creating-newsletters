@@ -1,5 +1,6 @@
 from django.db import models
 
+from users.models import User
 
 NULLABLE = {'blank': True, 'null': True}
 
@@ -8,6 +9,7 @@ class Clients(models.Model):
     email = models.EmailField(verbose_name='email', unique=True)
     fullname = models.CharField(max_length=255, verbose_name='ФИО')
     comment = models.TextField(verbose_name='Комментарий', **NULLABLE)
+    owner = models.ForeignKey(User, on_delete=models.SET_NULL, **NULLABLE)
 
     def __str__(self):
         return f"{self.fullname} ({self.email})"
@@ -20,6 +22,7 @@ class Clients(models.Model):
 class Messages(models.Model):
     subject = models.CharField(verbose_name='Тема')
     content = models.TextField(verbose_name='Содержание')
+    owner = models.ForeignKey(User, on_delete=models.SET_NULL, **NULLABLE)
 
     def __str__(self):
         return self.subject
@@ -46,6 +49,7 @@ class MailingSettings(models.Model):
     status = models.CharField(max_length=10, choices=status_choices, default='created', verbose_name='Статус')
     message = models.ForeignKey(Messages, on_delete=models.CASCADE, verbose_name='Сообщение')
     clients = models.ManyToManyField(Clients, verbose_name='Клиенты')
+    owner = models.ForeignKey(User, on_delete=models.SET_NULL, **NULLABLE)
 
     def __str__(self):
         return f"Рассылка №{self.pk} сообщения {self.message}"
@@ -53,20 +57,6 @@ class MailingSettings(models.Model):
     class Meta:
         verbose_name = 'рассылка'
         verbose_name_plural = 'рассылки'
-
-
-class MailingLogs(models.Model):
-    date_time = models.DateTimeField(verbose_name='Дата и время')
-    status = models.CharField(verbose_name='Статус попытки')
-    server_response = models.CharField(verbose_name='Ответ сервера', **NULLABLE)
-    mailing_settings = models.ForeignKey(MailingSettings, on_delete=models.CASCADE, verbose_name='Рассылка')
-
-    def __str__(self):
-        return f"{self.pk} {self.status} {self.mailing_settings}"
-
-    class Meta:
-        verbose_name = 'логи рассылки'
-        verbose_name_plural = 'логи рассылок'
 
 
 class Log(models.Model):
