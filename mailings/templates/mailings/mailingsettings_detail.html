@@ -38,6 +38,11 @@
             <p>
                 <a href="{% url 'mailings:mailing_logs' object.pk %}" class="btn btn-outline-primary" role="button">Просмотреть логи</a>
             </p>
+            {% if user.is_staff and user.groups.name == 'moderator' %}
+            <p>
+                <a href="{% url 'mailings:mailing_logs' object.pk %}" class="btn btn-outline-primary" role="button">Отключить</a>
+            </p>
+            {% endif %}
         </div>
     </div>
 </div>
