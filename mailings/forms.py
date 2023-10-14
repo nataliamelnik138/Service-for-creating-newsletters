@@ -27,3 +27,10 @@ class ClientsForm(StyleFormMixin, forms.ModelForm):
     class Meta:
         model = Clients
         fields = ('email', 'fullname', 'comment')
+
+
+class MessagesForm(StyleFormMixin, forms.ModelForm):
+
+    class Meta:
+        model = Messages
+        fields = ('subject', 'content')
