@@ -10,7 +10,6 @@ from django.core.cache import cache
 from blog.models import BlogPost
 from mailings.forms import MailingSettingsForm, ClientsForm, MessagesForm
 from mailings.models import MailingSettings, Clients, Log, Messages
-from users.models import User
 
 
 class MailingSettingsCreateView(LoginRequiredMixin, PermissionRequiredMixin, CreateView):
@@ -26,7 +25,7 @@ class MailingSettingsCreateView(LoginRequiredMixin, PermissionRequiredMixin, Cre
         return kwargs
 
     def form_valid(self, form):
-        form.instance.user = self.request.user
+        form.instance.owner = self.request.user
         return super().form_valid(form)
 
 
