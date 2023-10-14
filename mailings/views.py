@@ -8,8 +8,8 @@ from django.views.generic import ListView, DetailView, CreateView, UpdateView, D
 from django.core.cache import cache
 
 from blog.models import BlogPost
-from mailings.forms import MailingSettingsForm, ClientsForm
-from mailings.models import MailingSettings, Clients, Log
+from mailings.forms import MailingSettingsForm, ClientsForm, MessagesForm
+from mailings.models import MailingSettings, Clients, Log, Messages
 from users.models import User
 
 
@@ -207,3 +207,44 @@ class IndexView(TemplateView):
 
         context_data['object_list'] = object_list
         return context_data
+
+
+class MessagesCreateView(LoginRequiredMixin, CreateView):
+    model = Messages
+    form_class = MessagesForm
+    success_url = reverse_lazy('mailings:list_messages')
+
+    def form_valid(self, form):
+        form.instance.owner = self.request.user
+        return super().form_valid(form)
+
+
+class MessagesListView(LoginRequiredMixin, ListView):
+    model = Messages
+    extra_context = {
+        'title': 'Сообщения'
+    }
+
+    def get_queryset(self):
+        queryset = super().get_queryset()
+        if not self.request.user.is_staff:
+            queryset = super().get_queryset().filter(owner=self.request.user)
+
+        return queryset
+
+
+class MessagesUpdateView(LoginRequiredMixin, UpdateView):
+    model = Messages
+    form_class = MessagesForm
+    success_url = reverse_lazy('mailings:list_messages')
+
+    def get_object(self, queryset=None):
+        self.object = super().get_object(queryset)
+        if self.object.owner != self.request.user and not self.request.user.is_staff:
+            raise Http404
+        return self.object
+
+
+class MessagesDeleteView(LoginRequiredMixin, DeleteView):
+    model = Messages
+    success_url = reverse_lazy('mailings:list_messages')
