@@ -1,14 +1,16 @@
 from django.urls import path
+from django.views.decorators.cache import cache_page
+
 from mailings.apps import MailingsConfig
 from mailings.views import MailingSettingsListView, MailingSettingsCreateView, MailingSettingsUpdateView, \
     MailingSettingsDetailView, MailingSettingsDeleteView, ClientsDeleteView, ClientsDetailView, ClientsUpdateView, \
-    ClientsCreateView, ClientsListView, LogListView, get_mailing_logs
+    ClientsCreateView, ClientsListView, LogListView, get_mailing_logs, IndexView, disable_mailing, enable_mailing
 
 app_name = MailingsConfig.name
 
 
 urlpatterns = [
-    path('', MailingSettingsListView.as_view(), name='list'),
+    path('list/', MailingSettingsListView.as_view(), name='list'),
     path('create/', MailingSettingsCreateView.as_view(), name='create'),
     path('edit/<int:pk>', MailingSettingsUpdateView.as_view(), name='edit'),
     path('view/<int:pk>', MailingSettingsDetailView.as_view(), name='view'),
@@ -20,4 +22,7 @@ urlpatterns = [
     path('delete_client/<int:pk>', ClientsDeleteView.as_view(), name='delete_client'),
     path('log', LogListView.as_view(), name='log'),
     path('view/<int:pk>/logs', get_mailing_logs, name='mailing_logs'),
+    path('<int:pk>/disable_mailing', disable_mailing, name='disable_mailing'),
+    path('<int:pk>/enable_mailing', enable_mailing, name='enable_mailing'),
+    path('', cache_page(60)(IndexView.as_view()), name='index'),
 ]
