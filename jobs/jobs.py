@@ -19,15 +19,11 @@ def send_mailing():
             if mailing.start_date.timestamp() <= current_datetime.timestamp() <= mailing.end_date.timestamp():
                 is_mailing = True
                 if mailing.periodicity == 'daily':
-                    print('до отправки daily', mailing.start_date)
                     mailing.start_date = mailing.start_date + timedelta(1)
                 elif mailing.periodicity == 'weekly':
-                    print('до отправки weekly', mailing.start_date)
                     mailing.start_date = mailing.start_date + timedelta(7)
                 elif mailing.periodicity == 'monthly':
-                    print('до отправки monthly', mailing.start_date)
                     mailing.start_date = mailing.start_date + timedelta(30)
-                print('после отправки', mailing.start_date)
 
             if is_mailing:
                 mailing.save()
