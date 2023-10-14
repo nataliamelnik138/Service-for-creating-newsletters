@@ -50,9 +50,10 @@ class MailingSettings(models.Model):
     message = models.ForeignKey(Messages, on_delete=models.CASCADE, verbose_name='Сообщение')
     clients = models.ManyToManyField(Clients, verbose_name='Клиенты')
     owner = models.ForeignKey(User, on_delete=models.SET_NULL, **NULLABLE)
+    is_active = models.BooleanField(default=True)
 
     def __str__(self):
-        return f"Рассылка №{self.pk} сообщения {self.message}"
+        return f"Рассылка № {self.pk} (владелец {self.owner})"
 
     class Meta:
         verbose_name = 'рассылка'
