@@ -1,12 +1,13 @@
 import random
 
 from django.conf import settings
+from django.contrib.auth.mixins import LoginRequiredMixin, PermissionRequiredMixin
 from django.core.mail import send_mail
 from django.shortcuts import render
 from django.contrib.auth.views import LoginView as BaseLoginView
 from django.contrib.auth.views import LogoutView as BaseLogoutView
 from django.urls import reverse_lazy
-from django.views.generic import CreateView, TemplateView
+from django.views.generic import CreateView, TemplateView, ListView
 
 from users.forms import UserRegisterForm
 from users.models import User
@@ -64,3 +65,38 @@ def expectation(request):
         'title': 'Подтверждения регистрации'
     }
     return render(request, 'users/expectation.html', context)
+
+
+class UserListView(PermissionRequiredMixin, ListView):
+    model = User
+    extra_context = {
+        'title': 'Пользователи'
+    }
+    permission_required = 'users.view_user'
+
+    def get_queryset(self):
+        queryset = super().get_queryset().exclude(is_staff=True)
+
+        return queryset
+
+
+def block_user(request, pk):
+    user = User.objects.get(pk=pk)
+    user.is_active = False
+    user.save()
+    context = {
+        'object': user
+    }
+    return render(request, 'users/block_user.html', context)
+
+
+def unblock_user(request, pk):
+    user = User.objects.get(pk=pk)
+    user.is_active = True
+    user.save()
+    context = {
+        'object': user
+    }
+    return render(request, 'users/unblock_user.html', context)
+
+
