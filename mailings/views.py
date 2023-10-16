@@ -1,10 +1,12 @@
 from django.conf import settings
 from django.contrib.auth.decorators import login_required
-from django.contrib.auth.mixins import LoginRequiredMixin, PermissionRequiredMixin
+from django.contrib.auth.mixins import LoginRequiredMixin, \
+    PermissionRequiredMixin
 from django.http import Http404
 from django.shortcuts import render
 from django.urls import reverse_lazy
-from django.views.generic import ListView, DetailView, CreateView, UpdateView, DeleteView, TemplateView
+from django.views.generic import ListView, DetailView, CreateView, \
+    UpdateView, DeleteView, TemplateView
 from django.core.cache import cache
 
 from blog.models import BlogPost
@@ -12,7 +14,8 @@ from mailings.forms import MailingSettingsForm, ClientsForm, MessagesForm
 from mailings.models import MailingSettings, Clients, Log, Messages
 
 
-class MailingSettingsCreateView(LoginRequiredMixin, PermissionRequiredMixin, CreateView):
+class MailingSettingsCreateView(LoginRequiredMixin,
+                                PermissionRequiredMixin, CreateView):
     model = MailingSettings
     form_class = MailingSettingsForm
 
@@ -29,7 +32,8 @@ class MailingSettingsCreateView(LoginRequiredMixin, PermissionRequiredMixin, Cre
         return super().form_valid(form)
 
 
-class MailingSettingsUpdateView(LoginRequiredMixin, PermissionRequiredMixin, UpdateView):
+class MailingSettingsUpdateView(LoginRequiredMixin,
+                                PermissionRequiredMixin, UpdateView):
     model = MailingSettings
     fields = ('start_date', 'end_date', 'periodicity', 'message', 'clients')
     permission_required = 'mailings.change_mailingsettings'
@@ -37,7 +41,8 @@ class MailingSettingsUpdateView(LoginRequiredMixin, PermissionRequiredMixin, Upd
 
     def get_object(self, queryset=None):
         self.object = super().get_object(queryset)
-        if self.object.owner != self.request.user and not self.request.user.is_staff:
+        if self.object.owner != self.request.user \
+                and not self.request.user.is_staff:
             raise Http404
         return self.object
 
@@ -66,13 +71,15 @@ class MailingSettingsDetailView(LoginRequiredMixin, DetailView):
         return context_data
 
 
-class MailingSettingsDeleteView(LoginRequiredMixin, PermissionRequiredMixin, DeleteView):
+class MailingSettingsDeleteView(LoginRequiredMixin,
+                                PermissionRequiredMixin, DeleteView):
     model = MailingSettings
     permission_required = 'mailings.delete_mailingsettings'
     success_url = reverse_lazy('mailings:list')
 
 
-class ClientsCreateView(LoginRequiredMixin, PermissionRequiredMixin, CreateView):
+class ClientsCreateView(LoginRequiredMixin,
+                        PermissionRequiredMixin, CreateView):
     model = Clients
     form_class = ClientsForm
     # fields = ('email', 'fullname', 'comment')
@@ -84,7 +91,8 @@ class ClientsCreateView(LoginRequiredMixin, PermissionRequiredMixin, CreateView)
         return super().form_valid(form)
 
 
-class ClientsUpdateView(LoginRequiredMixin, PermissionRequiredMixin, UpdateView):
+class ClientsUpdateView(LoginRequiredMixin,
+                        PermissionRequiredMixin, UpdateView):
     model = Clients
     fields = ('email', 'fullname', 'comment')
     permission_required = 'mailings.change_clients'
@@ -92,7 +100,8 @@ class ClientsUpdateView(LoginRequiredMixin, PermissionRequiredMixin, UpdateView)
 
     def get_object(self, queryset=None):
         self.object = super().get_object(queryset)
-        if self.object.owner != self.request.user and not self.request.user.is_staff:
+        if self.object.owner != self.request.user \
+                and not self.request.user.is_staff:
             raise Http404
         return self.object
 
@@ -122,7 +131,8 @@ class ClientsDetailView(LoginRequiredMixin, DetailView):
         return context_data
 
 
-class ClientsDeleteView(LoginRequiredMixin, PermissionRequiredMixin, DeleteView):
+class ClientsDeleteView(LoginRequiredMixin,
+                        PermissionRequiredMixin, DeleteView):
     model = Clients
     permission_required = 'mailings.delete_clients'
     success_url = reverse_lazy('mailings:list_client')
@@ -192,7 +202,8 @@ class IndexView(TemplateView):
     def get_context_data(self, **kwargs):
         context_data = super().get_context_data(**kwargs)
         context_data['count_mailing'] = MailingSettings.objects.all().count()
-        context_data['count_active_mailing'] = MailingSettings.objects.filter(is_active=True).count()
+        context_data['count_active_mailing'] = \
+            MailingSettings.objects.filter(is_active=True).count()
         context_data['count_user'] = Clients.objects.all().count()
 
         if settings.CACHE_ENABLED:
@@ -239,7 +250,8 @@ class MessagesUpdateView(LoginRequiredMixin, UpdateView):
 
     def get_object(self, queryset=None):
         self.object = super().get_object(queryset)
-        if self.object.owner != self.request.user and not self.request.user.is_staff:
+        if self.object.owner != self.request.user \
+                and not self.request.user.is_staff:
             raise Http404
         return self.object
 

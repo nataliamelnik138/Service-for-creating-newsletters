@@ -16,7 +16,9 @@ def send_mailing():
             server_response = 'Email sent successfully'
             message = mailing.message
 
-            if mailing.start_date.timestamp() <= current_datetime.timestamp() <= mailing.end_date.timestamp():
+            if mailing.start_date.timestamp() <= \
+                    current_datetime.timestamp() <= \
+                    mailing.end_date.timestamp():
                 is_mailing = True
                 if mailing.periodicity == 'daily':
                     mailing.start_date = mailing.start_date + timedelta(1)
@@ -39,13 +41,17 @@ def send_mailing():
                     server_response = str(e)
 
                 finally:
-                    Log.objects.create(mailing=mailing,
-                                        status=attempt_status,
-                                        response=server_response)
+                    Log.objects.create(
+                        mailing=mailing,
+                        status=attempt_status,
+                        response=server_response
+                    )
 
-                if mailing.end_date.timestamp() >= mailing.start_date.timestamp():
+                if mailing.end_date.timestamp() >= \
+                        mailing.start_date.timestamp():
                     mailing.status = 'started'
                     mailing.save()
-                elif mailing.end_date.timestamp() <= mailing.start_date.timestamp():
+                elif mailing.end_date.timestamp() <= \
+                        mailing.start_date.timestamp():
                     mailing.status = 'completed'
                     mailing.save()

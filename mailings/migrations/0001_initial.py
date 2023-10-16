@@ -14,10 +14,26 @@ class Migration(migrations.Migration):
         migrations.CreateModel(
             name='Clients',
             fields=[
-                ('id', models.BigAutoField(auto_created=True, primary_key=True, serialize=False, verbose_name='ID')),
-                ('email', models.EmailField(max_length=254, unique=True, verbose_name='email')),
-                ('fullname', models.CharField(max_length=255, verbose_name='ФИО')),
-                ('comment', models.TextField(blank=True, null=True, verbose_name='Комментарий')),
+                ('id', models.BigAutoField(
+                    auto_created=True,
+                    primary_key=True,
+                    serialize=False,
+                    verbose_name='ID')
+                 ),
+                ('email', models.EmailField(
+                    max_length=254,
+                    unique=True,
+                    verbose_name='email')
+                 ),
+                ('fullname', models.CharField(
+                    max_length=255,
+                    verbose_name='ФИО')
+                 ),
+                ('comment', models.TextField(
+                    blank=True,
+                    null=True,
+                    verbose_name='Комментарий')
+                 ),
             ],
             options={
                 'verbose_name': 'клиент',
@@ -27,20 +43,60 @@ class Migration(migrations.Migration):
         migrations.CreateModel(
             name='Log',
             fields=[
-                ('id', models.BigAutoField(auto_created=True, primary_key=True, serialize=False, verbose_name='ID')),
-                ('timestamp', models.DateTimeField(auto_now_add=True, verbose_name='Дата и время последней попытки')),
-                ('status', models.CharField(max_length=20, verbose_name='Статус попытки')),
-                ('response', models.TextField(blank=True, verbose_name='Ответ сервера')),
+                ('id', models.BigAutoField(
+                    auto_created=True,
+                    primary_key=True,
+                    serialize=False,
+                    verbose_name='ID')
+                 ),
+                ('timestamp', models.DateTimeField(
+                    auto_now_add=True,
+                    verbose_name='Дата и время последней попытки')
+                 ),
+                ('status', models.CharField(
+                    max_length=20,
+                    verbose_name='Статус попытки')
+                 ),
+                ('response', models.TextField(
+                    blank=True,
+                    verbose_name='Ответ сервера')
+                 ),
             ],
         ),
         migrations.CreateModel(
             name='MailingSettings',
             fields=[
-                ('id', models.BigAutoField(auto_created=True, primary_key=True, serialize=False, verbose_name='ID')),
-                ('start_date', models.DateTimeField(verbose_name='Начало рассылки')),
-                ('end_date', models.DateTimeField(verbose_name='Окончание рассылки')),
-                ('periodicity', models.CharField(choices=[('daily', 'Ежедневно'), ('weekly', 'Еженедельно'), ('monthly', 'Ежемесячно')], max_length=10, verbose_name='Периодичность')),
-                ('status', models.CharField(choices=[('created', 'Created'), ('started', 'Started'), ('completed', 'Completed')], default='created', max_length=10, verbose_name='Статус')),
+                ('id', models.BigAutoField(
+                    auto_created=True,
+                    primary_key=True,
+                    serialize=False,
+                    verbose_name='ID')),
+                ('start_date', models.DateTimeField(
+                    verbose_name='Начало рассылки')
+                 ),
+                (
+                    'end_date',
+                    models.DateTimeField(verbose_name='Окончание рассылки')
+                ),
+                ('periodicity', models.CharField(
+                    choices=[
+                        ('daily', 'Ежедневно'),
+                        ('weekly', 'Еженедельно'),
+                        ('monthly', 'Ежемесячно')
+                    ],
+                    max_length=10,
+                    verbose_name='Периодичность')
+                 ),
+                ('status', models.CharField(
+                    choices=[
+                        ('created', 'Created'),
+                        ('started', 'Started'),
+                        ('completed', 'Completed')
+                    ],
+                    default='created',
+                    max_length=10,
+                    verbose_name='Статус')
+                 ),
             ],
             options={
                 'verbose_name': 'рассылка',
@@ -50,7 +106,12 @@ class Migration(migrations.Migration):
         migrations.CreateModel(
             name='Messages',
             fields=[
-                ('id', models.BigAutoField(auto_created=True, primary_key=True, serialize=False, verbose_name='ID')),
+                ('id', models.BigAutoField(
+                    auto_created=True,
+                    primary_key=True,
+                    serialize=False,
+                    verbose_name='ID')
+                 ),
                 ('subject', models.CharField(verbose_name='Тема')),
                 ('content', models.TextField(verbose_name='Содержание')),
             ],

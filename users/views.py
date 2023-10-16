@@ -1,7 +1,7 @@
 import random
 
 from django.conf import settings
-from django.contrib.auth.mixins import LoginRequiredMixin, PermissionRequiredMixin
+from django.contrib.auth.mixins import PermissionRequiredMixin
 from django.core.mail import send_mail
 from django.shortcuts import render
 from django.contrib.auth.views import LoginView as BaseLoginView
@@ -98,5 +98,3 @@ def unblock_user(request, pk):
         'object': user
     }
     return render(request, 'users/unblock_user.html', context)
-
-

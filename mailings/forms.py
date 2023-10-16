@@ -1,6 +1,4 @@
 from django import forms
-from django.contrib.auth.forms import UserCreationForm, UserChangeForm
-
 from mailings.models import MailingSettings, Clients, Messages
 from users.forms import StyleFormMixin
 
@@ -19,7 +17,13 @@ class MailingSettingsForm(StyleFormMixin, forms.ModelForm):
 
     class Meta:
         model = MailingSettings
-        fields = ('start_date', 'end_date', 'periodicity', 'message', 'clients')
+        fields = (
+            'start_date',
+            'end_date',
+            'periodicity',
+            'message',
+            'clients'
+        )
 
 
 class ClientsForm(StyleFormMixin, forms.ModelForm):

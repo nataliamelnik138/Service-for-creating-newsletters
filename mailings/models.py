@@ -40,14 +40,27 @@ class MailingSettings(models.Model):
         ('weekly', 'Еженедельно'),
         ('monthly', 'Ежемесячно'),
     ]
-    periodicity = models.CharField(max_length=10, choices=period_choices, verbose_name='Периодичность')
+    periodicity = models.CharField(
+        max_length=10,
+        choices=period_choices,
+        verbose_name='Периодичность'
+    )
     status_choices = [
         ('created', 'Created'),
         ('started', 'Started'),
         ('completed', 'Completed'),
     ]
-    status = models.CharField(max_length=10, choices=status_choices, default='created', verbose_name='Статус')
-    message = models.ForeignKey(Messages, on_delete=models.CASCADE, verbose_name='Сообщение')
+    status = models.CharField(
+        max_length=10,
+        choices=status_choices,
+        default='created',
+        verbose_name='Статус'
+    )
+    message = models.ForeignKey(
+        Messages,
+        on_delete=models.CASCADE,
+        verbose_name='Сообщение'
+    )
     clients = models.ManyToManyField(Clients, verbose_name='Клиенты')
     owner = models.ForeignKey(User, on_delete=models.SET_NULL, **NULLABLE)
     is_active = models.BooleanField(default=True)
@@ -61,7 +74,14 @@ class MailingSettings(models.Model):
 
 
 class Log(models.Model):
-    mailing = models.ForeignKey(MailingSettings, on_delete=models.CASCADE, verbose_name='Рассылка')
-    timestamp = models.DateTimeField(auto_now_add=True, verbose_name='Дата и время последней попытки')
+    mailing = models.ForeignKey(
+        MailingSettings,
+        on_delete=models.CASCADE,
+        verbose_name='Рассылка'
+    )
+    timestamp = models.DateTimeField(
+        auto_now_add=True,
+        verbose_name='Дата и время последней попытки'
+    )
     status = models.CharField(max_length=20, verbose_name='Статус попытки')
     response = models.TextField(blank=True, verbose_name='Ответ сервера')

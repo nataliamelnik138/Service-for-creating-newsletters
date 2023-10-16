@@ -7,4 +7,3 @@ from blog.models import BlogPost
 class BlogPostAdmin(admin.ModelAdmin):
     list_display = ('pk', 'title')
     list_filter = ('is_published',)
-
